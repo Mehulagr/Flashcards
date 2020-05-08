@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Surface, Headline, Button, Subheading, Title, Avatar } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import { getDeck } from '../store/api';
+import { clearLocalNotification, setLocalNotification } from '../store/notification'
 
 class PlayDeck extends Component {
   state= {
@@ -73,6 +74,9 @@ class PlayDeck extends Component {
       </View>
       )
     }
+
+    clearLocalNotification()
+      .then(setLocalNotification)
     
     return (
       <View>

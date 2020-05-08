@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fetchDecks } from '../store/api.js'
 import { getDecks } from '../actions/index.js';
 import { connect } from 'react-redux'
+import { setLocalNotification } from '../store/notification'
 
 function DeckItem ({item}) {
     const navigation = useNavigation();
@@ -24,6 +25,8 @@ class DecksDashboard extends Component {
 
         fetchDecks()
             .then((decks) => dispatch(getDecks(decks)))
+
+        setLocalNotification()
     }
 
     render() {
