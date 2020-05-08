@@ -48,7 +48,6 @@ class PlayDeck extends Component {
   render () {
 
     if (this.state.questionsList.length === 0) {
-      console.log(this.state.questionsList)
       return (
         <View style={styles.container}>
           <Avatar.Icon size={100} icon="help" />
@@ -66,7 +65,7 @@ class PlayDeck extends Component {
           <Button mode="text" onPress={this.toggleAnswers}> Show Answer </Button>
         </Surface>}
         {this.state.viewingAnswer && <Surface style={styles.surface}>
-          <Headline>{this.state.questionsList[this.state.currentQuestion + 1].answer}</Headline>
+          <Headline>{this.state.questionsList[this.state.currentQuestion].answer}</Headline>
           <Button mode="text" onPress={this.toggleAnswers}> View Question </Button>
         </Surface>}
         <Button mode="contained" style={styles.margin} onPress={() => this.recordAnswer(true)} color="green"> Correct </Button>

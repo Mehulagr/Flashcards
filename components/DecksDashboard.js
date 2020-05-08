@@ -1,23 +1,10 @@
 import React, { Component } from 'react'
-import { List, Button } from 'react-native-paper';
-import { FlatList, View } from 'react-native';
+import { List, Avatar, Subheading } from 'react-native-paper';
+import { FlatList, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { getDecks, clearDecks } from '../store/api.js'
-
-const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'First Item',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Second Item',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Third Item',
-    },
-];
+import { fetchDecks } from '../store/api.js'
+import { getDecks } from '../actions/index.js';
+import { connect } from 'react-redux'
 
 function DeckItem ({item}) {
     const navigation = useNavigation();
@@ -32,33 +19,56 @@ function DeckItem ({item}) {
 }
 
 class DecksDashboard extends Component {
-    state = {
-        dataArray: []
-    }
-
     componentDidMount () {
-        getDecks()
-            .then((decks) => {
-                keys = Object.keys(decks)
-                const dataArray = keys.map((item) => {
-                    return {
-                        title: decks[item].title,
-                        questionCount: decks[item].questions ? decks[item].questions.length : "0"
-                    }
-                })
-                this.setState({ dataArray })
-            })
+        const { dispatch } = this.props
+
+        fetchDecks()
+            .then((decks) => dispatch(getDecks(decks)))
     }
 
     render() {
+        const { decksList } = this.props
+
+        const dataArray = Object.keys(decksList).map((item) => {
+            return {
+                title: decksList[item].title,
+                questionCount: decksList[item].questions ? decksList[item].questions.length : "0"
+            }
+        })
+
+        if (dataArray.length === 0) {
+            return (
+              <View style={styles.container}>
+                <Avatar.Icon size={100} icon="help" />
+                <Subheading>You don't have any decks. Go create some!!</Subheading>
+              </View>
+            )
+          }
+
         return (
             <FlatList
                 keyExtractor={(item) => item.title}
-                data={this.state.dataArray}
+                data={dataArray}
                 renderItem={(item) => <DeckItem item={item}/>}
                 />
         )
     }
 }
 
-export default DecksDashboard
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#ecf0f1',
+      padding: 8,
+    },
+  });
+
+function mapStateToProps (decks) {
+    return {
+        decksList: decks
+    }
+}
+
+export default connect(mapStateToProps)(DecksDashboard)

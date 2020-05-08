@@ -1,17 +1,12 @@
 import  {AsyncStorage } from 'react-native';
 
-//getDecks: return all of the decks along with their titles, questions, and answers.
-//getDeck: take in a single id argument and return the deck associated with that id.
-//saveDeckTitle: take in a single title argument and add it to the decks.
-//addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
-
 const STORAGE_KEY = 'mobile-flashcard';
 
-const getDecks = () => {
+const fetchDecks = () => {
     return AsyncStorage.getItem(STORAGE_KEY).then((results) => {
       return results === null ? null : JSON.parse(results);
     });
-  };
+};
 
 const getDeck = (id) => {
   return AsyncStorage.getItem(STORAGE_KEY).then((results) => {
@@ -27,10 +22,6 @@ const saveDeckTitle = (deckTitle) => {
     return AsyncStorage.mergeItem(STORAGE_KEY, JSON.stringify({
       [deckTitle]: entry
     }))
-}
-
-const clearDecks = () => {
-  return AsyncStorage.removeItem(STORAGE_KEY)
 }
 
 const addCardToDeck = (deckTitle, question, answer) => {
@@ -54,6 +45,16 @@ const addCardToDeck = (deckTitle, question, answer) => {
     })
 }
 
+const removeEntry = (key) => {
+  return AsyncStorage.getItem(STORAGE_KEY)
+    .then((results) => {
+      const data = JSON.parse(results)
+      data[key] = undefined
+      delete data[key]
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    })
+}
 
-export { getDecks, getDeck, saveDeckTitle, addCardToDeck }
+
+export { fetchDecks, getDeck, saveDeckTitle, addCardToDeck, removeEntry }
 

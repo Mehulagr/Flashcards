@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { TextInput, Button } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import { saveDeckTitle, getDecks } from '../store/api.js'
+import { saveDeckTitle, fetchDecks } from '../store/api.js'
+import { addDeck } from '../actions/index.js';
+import { connect } from 'react-redux';
 
 class DecksDashboard extends Component {
     state = {
@@ -13,13 +15,11 @@ class DecksDashboard extends Component {
     }
 
     createDeck = (e) => {
+        const {dispatch} = this.props
         saveDeckTitle(this.state.deckTitle)
-            .then(getDecks()
-                .then((decks) => {
-                    console.log(decks)
-                })
-            )
-            .then(this.setState({ deckTitle: '' }))
+            .then(  dispatch(addDeck(this.state.deckTitle))   )
+            .then(  this.setState({deckTitle: ''})  )
+            .then(  this.props.navigation.navigate('View Deck', {item: {title: this.state.deckTitle}})  )
     }
 
     render() {
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default DecksDashboard
+export default connect()(DecksDashboard)
