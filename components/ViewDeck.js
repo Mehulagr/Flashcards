@@ -7,12 +7,11 @@ import { deleteDeckFromState } from '../actions'
 
 class ViewDeck extends Component {
     deleteDeck = (currentDeckTitle) => {
-        const {dispatch} = this.props
         removeEntry(currentDeckTitle)
-            .then(this.blah(currentDeckTitle))
+            .then(this.removeAndNavigate(currentDeckTitle))
     }
 
-    blah = (currentDeckTitle) => {
+    removeAndNavigate = (currentDeckTitle) => {
         const {dispatch} = this.props
         dispatch(deleteDeckFromState(currentDeckTitle))
         this.props.navigation.goBack()

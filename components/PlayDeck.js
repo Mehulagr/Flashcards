@@ -85,7 +85,7 @@ class PlayDeck extends Component {
           <Title>{this.state.correctAnswers}/{this.state.totalQuestions}</Title>
         </Surface>
         <Button mode="outlined" style={styles.margin} onPress={this.resetQuiz}> Restart Quiz </Button>
-        <Button mode="contained" style={styles.margin} onPress={() => this.props.navigation.popToTop()}> Back to decks </Button>
+        <Button mode="contained" style={styles.margin} onPress={() => this.props.navigation.goBack()}> Back to deck </Button>
       </View>
     )
   }
